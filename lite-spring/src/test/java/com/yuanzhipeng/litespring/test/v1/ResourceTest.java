@@ -27,7 +27,7 @@ public class ResourceTest {
     
     @Test
     public void testFileSystemResource() {
-        Resource r = new FileSystemResource("D:\\spring\\lite-spring\\lite-spring\\src\\test\\resources\\petstore-v1.xml");
+        Resource r = new FileSystemResource("src\\test\\resources\\petstore-v1.xml");
         try (InputStream in = r.getInputStream()){
             assertNotNull(in);
         } catch(Exception e) {
