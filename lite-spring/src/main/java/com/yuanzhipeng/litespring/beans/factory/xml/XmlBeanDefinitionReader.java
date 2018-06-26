@@ -3,21 +3,34 @@ package com.yuanzhipeng.litespring.beans.factory.xml;
 import java.io.InputStream;
 import java.util.Iterator;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.dom4j.Document;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 
 import com.yuanzhipeng.litespring.beans.BeanDefinition;
+import com.yuanzhipeng.litespring.beans.PropertyValue;
 import com.yuanzhipeng.litespring.beans.factory.BeanDefinitionStoreException;
+import com.yuanzhipeng.litespring.beans.factory.config.RuntimeBeanReference;
+import com.yuanzhipeng.litespring.beans.factory.config.TypedStringValue;
 import com.yuanzhipeng.litespring.beans.factory.support.BeanDefinitionRegistry;
 import com.yuanzhipeng.litespring.beans.factory.support.GenericBeanDefinition;
 import com.yuanzhipeng.litespring.core.io.Resource;
-import com.yuanzhipeng.litespring.util.ClassUtils;
+import com.yuanzhipeng.litespring.util.StringUtils;
 
 public class XmlBeanDefinitionReader {
     private static final String ATTRIBUTE_CLASS = "class";
     private static final String ATTRIBUTE_ID = "id";
     private static final String ATTRIBUTE_SCOPE = "scope";
+    
+    private static final String ATTRIBUTE_PROPERTY = "property";
+    private static final String ATTRIBUTE_REF = "ref";
+    private static final String ATTRIBUTE_VALUE = "value";
+    private static final String ATTRIBUTE_NAME = "name";
+    
+    private static final Logger logger = LogManager.getLogger(XmlBeanDefinitionReader.class);;
+    
     private BeanDefinitionRegistry registry;
 
     public XmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
@@ -26,7 +39,6 @@ public class XmlBeanDefinitionReader {
     }
 
     public void loadBeanDefinition(Resource resource) {
-        ClassLoader cl = ClassUtils.getDefaultClassLoader();
         //ʹ��try-with-resource���ر�InputStream
         try (InputStream in = resource.getInputStream()){
             SAXReader reader = new SAXReader();
@@ -42,11 +54,41 @@ public class XmlBeanDefinitionReader {
                 if (ele.attributeValue(ATTRIBUTE_SCOPE) != null) {
                     bd.setScope(ele.attributeValue(ATTRIBUTE_SCOPE));
                 }
-                
+                parsePropertyElement(ele, bd);
                 registry.registryBeanDefinition(id, bd);
             }
         } catch (Exception e) {
             throw new BeanDefinitionStoreException("IOException parsing xml");
+        }
+    }
+
+    private void parsePropertyElement(Element beanEle, BeanDefinition bd) {
+        // TODO Auto-generated method stub
+        Iterator<?> iter = beanEle.elementIterator(ATTRIBUTE_PROPERTY);
+        while (iter.hasNext()) {
+            Element ele = (Element)iter.next();
+            String name = ele.attributeValue(ATTRIBUTE_NAME);
+            if (!StringUtils.hasLength(name)) {
+                logger.fatal("Tag 'property' must have a 'name' attribute.");
+                return;
+            }
+            Object val = parsePropertyValue(ele, bd, name);
+            PropertyValue pv = new PropertyValue(name, val);
+            bd.getPropertyValues().add(pv);
+        }
+    }
+
+    private Object parsePropertyValue(Element ele, BeanDefinition bd, String name) {
+        boolean hasRefAttribute = (ele.attributeValue(ATTRIBUTE_REF)!= null);
+        boolean hasValAttribute = (ele.attributeValue(ATTRIBUTE_VALUE)!= null);
+        if (hasRefAttribute) {
+            String refName = ele.attributeValue(ATTRIBUTE_REF);
+            return new RuntimeBeanReference(refName);
+        } else if (hasValAttribute){
+            String value = ele.attributeValue(ATTRIBUTE_VALUE);
+            return new TypedStringValue(value);
+        } else {
+            throw new RuntimeException(name + " must specify a ref or value");
         }
     }
 }
