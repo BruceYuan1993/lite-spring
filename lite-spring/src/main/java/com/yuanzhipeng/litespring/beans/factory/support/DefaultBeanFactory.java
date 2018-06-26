@@ -1,20 +1,28 @@
 package com.yuanzhipeng.litespring.beans.factory.support;
 
+import java.beans.BeanInfo;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.Method;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.yuanzhipeng.litespring.beans.BeanDefinition;
+import com.yuanzhipeng.litespring.beans.PropertyValue;
+import com.yuanzhipeng.litespring.beans.SimpleTypeConverter;
+import com.yuanzhipeng.litespring.beans.TypeConverter;
 import com.yuanzhipeng.litespring.beans.factory.BeanCreationException;
 import com.yuanzhipeng.litespring.beans.factory.config.ConfigurableBeanFactory;
 import com.yuanzhipeng.litespring.util.ClassUtils;
 
-public class DefaultBeanFactory extends DefaultSingletonBeanRegistry 
-                implements ConfigurableBeanFactory, BeanDefinitionRegistry {
+public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
+        implements ConfigurableBeanFactory, BeanDefinitionRegistry {
 
-    private static final String ATTRIBUTE_CLASS = "class";
-    private static final String ATTRIBUTE_ID = "id";
     private final Map<String, BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>();
     private ClassLoader beanClassLoader;
+    private BeanDefinitionValueResolver resolver = new BeanDefinitionValueResolver(this);
+    private TypeConverter converter = new SimpleTypeConverter();
     public BeanDefinition getBeanDefinition(String beanId) {
         // TODO Auto-generated method stub
         return beanDefinitionMap.get(beanId);
@@ -26,7 +34,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
         if (bd == null) {
             throw new BeanCreationException("Bean Definition does not exist.");
         }
-        
+
         if (bd.isSingleton()) {
             Object bean = this.getSingleton(beanId);
             if (bean == null) {
@@ -36,10 +44,43 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
             return bean;
         }
         return createBean(bd);
-        
+
     }
 
     private Object createBean(BeanDefinition bd) {
+        // TODO Auto-generated method stub
+        Object bean = instantiateBean(bd);
+        populateBean(bd, bean);
+        return bean;
+    }
+
+    private void populateBean(BeanDefinition bd, Object bean) {
+        // TODO Auto-generated method stub
+        List<PropertyValue> properties = bd.getPropertyValues();
+        if (properties == null || properties.isEmpty()) {
+            return;
+        }
+
+        try {
+            BeanInfo beanInfo = Introspector.getBeanInfo(bean.getClass());
+            PropertyDescriptor[] pds = beanInfo.getPropertyDescriptors();
+            for (PropertyValue p : properties) {
+                for (PropertyDescriptor item : pds) {
+                    if (item.getName().equals(p.getName())) {
+                        Method method = item.getWriteMethod();
+                        Object resolvedValue = resolver.resolveValueIfNecessary(p.getValue());
+                        method.invoke(bean, converter.convertIfNecessary(resolvedValue, item.getPropertyType()));
+                        break;
+                    }
+                }
+                
+            }
+        } catch (Exception e) {
+            
+        }
+    }
+
+    private Object instantiateBean(BeanDefinition bd) {
         // TODO Auto-generated method stub
         String beanClassName = bd.getBeanClassName();
         try {
@@ -47,7 +88,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
             return cls.newInstance();
         } catch (Exception e) {
             // TODO Auto-generated catch block
-            throw new BeanCreationException("create bean for "+ beanClassName +" failed",e);
+            throw new BeanCreationException("create bean for " + beanClassName + " failed", e);
         }
     }
 
@@ -66,7 +107,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
     @Override
     public ClassLoader getBeanClassLoader() {
         // TODO Auto-generated method stub
-        return this.beanClassLoader == null ? ClassUtils.getDefaultClassLoader(): beanClassLoader;
+        return this.beanClassLoader == null ? ClassUtils.getDefaultClassLoader() : beanClassLoader;
     }
 
 }

@@ -1,12 +1,17 @@
 package com.yuanzhipeng.litespring.beans.factory.support;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.yuanzhipeng.litespring.beans.BeanDefinition;
+import com.yuanzhipeng.litespring.beans.PropertyValue;
 
 public class GenericBeanDefinition implements BeanDefinition{
 
     private String id;
     private String beanClassName;
     private String scope = "";
+    private List<PropertyValue> pvs = new ArrayList<>();
     public String getId() {
         return id;
     }
@@ -49,6 +54,12 @@ public class GenericBeanDefinition implements BeanDefinition{
     public void setScope(String scope) {
         // TODO Auto-generated method stub
         this.scope = scope;
+    }
+
+    @Override
+    public List<PropertyValue> getPropertyValues() {
+        // TODO Auto-generated method stub
+        return pvs;
     }
 
 }

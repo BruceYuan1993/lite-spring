@@ -44,7 +44,6 @@ public class BeanFactoryTest {
     @Test(expected = BeanCreationException.class)
     public void testInvalidBean() {
         reader.loadBeanDefinition(new ClassPathResource("petstore-v1.xml"));
-        BeanDefinition bd = factory.getBeanDefinition("petStore");
         factory.getBean("invalidBean");
     }
     
