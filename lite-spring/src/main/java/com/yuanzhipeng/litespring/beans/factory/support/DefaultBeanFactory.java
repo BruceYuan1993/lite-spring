@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.apache.commons.beanutils.BeanUtils;
+
 import com.yuanzhipeng.litespring.beans.BeanDefinition;
 import com.yuanzhipeng.litespring.beans.PropertyValue;
 import com.yuanzhipeng.litespring.beans.SimpleTypeConverter;
@@ -50,7 +52,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
     private Object createBean(BeanDefinition bd) {
         // TODO Auto-generated method stub
         Object bean = instantiateBean(bd);
-        populateBean(bd, bean);
+        populateBeanUseCommonBeanUtils(bd, bean);
         return bean;
     }
 
@@ -74,6 +76,23 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
                     }
                 }
                 
+            }
+        } catch (Exception e) {
+            
+        }
+    }
+    
+    private void populateBeanUseCommonBeanUtils(BeanDefinition bd, Object bean) {
+        List<PropertyValue> properties = bd.getPropertyValues();
+        if (properties == null || properties.isEmpty()) {
+            return;
+        }
+
+        try {
+            for (PropertyValue p : properties) {
+                String propertyName = p.getName();
+                Object resolvedValue = resolver.resolveValueIfNecessary(p.getValue());
+                BeanUtils.setProperty(bean, propertyName, resolvedValue);
             }
         } catch (Exception e) {
             
