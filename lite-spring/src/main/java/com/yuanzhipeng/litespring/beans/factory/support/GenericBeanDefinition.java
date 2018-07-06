@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.yuanzhipeng.litespring.beans.BeanDefinition;
+import com.yuanzhipeng.litespring.beans.ConstructorArgument;
 import com.yuanzhipeng.litespring.beans.PropertyValue;
 
 public class GenericBeanDefinition implements BeanDefinition{
@@ -12,6 +13,9 @@ public class GenericBeanDefinition implements BeanDefinition{
     private String beanClassName;
     private String scope = "";
     private List<PropertyValue> pvs = new ArrayList<>();
+    private ConstructorArgument constructorArgument = new ConstructorArgument();
+    
+    
     public String getId() {
         return id;
     }
@@ -60,6 +64,12 @@ public class GenericBeanDefinition implements BeanDefinition{
     public List<PropertyValue> getPropertyValues() {
         // TODO Auto-generated method stub
         return pvs;
+    }
+
+    @Override
+    public ConstructorArgument getConstructorArgument() {
+        // TODO Auto-generated method stub
+        return constructorArgument;
     }
 
 }
