@@ -72,4 +72,10 @@ public class GenericBeanDefinition implements BeanDefinition{
         return constructorArgument;
     }
 
+    @Override
+    public boolean hasConstructorArgumentValues() {
+        // TODO Auto-generated method stub
+        return !this.constructorArgument.isEmpty();
+    }
+
 }

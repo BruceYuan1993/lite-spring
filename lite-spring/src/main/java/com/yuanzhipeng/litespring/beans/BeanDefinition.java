@@ -13,8 +13,10 @@ public interface BeanDefinition {
     
     public boolean isSingleton();
     public boolean isPrototype();
+    String getId();
     String getScope();
     void setScope(String scope);
     List<PropertyValue> getPropertyValues();
     ConstructorArgument getConstructorArgument();
+    boolean hasConstructorArgumentValues();
 }

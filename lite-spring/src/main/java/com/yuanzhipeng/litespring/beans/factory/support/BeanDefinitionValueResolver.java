@@ -1,12 +1,13 @@
 package com.yuanzhipeng.litespring.beans.factory.support;
 
 
+import com.yuanzhipeng.litespring.beans.factory.BeanFactory;
 import com.yuanzhipeng.litespring.beans.factory.config.RuntimeBeanReference;
 import com.yuanzhipeng.litespring.beans.factory.config.TypedStringValue;
 
 public class BeanDefinitionValueResolver {
-    private final DefaultBeanFactory factory;
-    public BeanDefinitionValueResolver(DefaultBeanFactory factory) {
+    private final BeanFactory factory;
+    public BeanDefinitionValueResolver(BeanFactory factory) {
         // TODO Auto-generated constructor stub
         this.factory = factory;
     }

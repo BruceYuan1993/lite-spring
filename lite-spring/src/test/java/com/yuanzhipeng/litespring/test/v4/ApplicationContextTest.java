@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import com.yuanzhipeng.litespring.context.ApplicationContext;
 import com.yuanzhipeng.litespring.context.support.ClassPathXmlApplicationContext;
-import com.yuanzhipeng.litespring.service.v2.PetStroeService;
+import com.yuanzhipeng.litespring.service.v4.PetStroeService;
 
 public class ApplicationContextTest {
     @Test
