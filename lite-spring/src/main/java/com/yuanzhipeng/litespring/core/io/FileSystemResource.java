@@ -15,6 +15,11 @@ public class FileSystemResource implements Resource {
         this.path = path;
         this.file = new File(path);
     }
+    public FileSystemResource(File file) {
+        // TODO Auto-generated constructor stub
+        this.file = file;
+        this.path = file.getPath();
+    }
     @Override
     public InputStream getInputStream() throws IOException {
         // It will create new File instance everytime if use string constructor。

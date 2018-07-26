@@ -12,6 +12,7 @@ public class GenericBeanDefinition implements BeanDefinition{
     private String id;
     private String beanClassName;
     private String scope = "";
+    private Class<?> beanClass;
     private List<PropertyValue> pvs = new ArrayList<>();
     private ConstructorArgument constructorArgument = new ConstructorArgument();
     
@@ -25,6 +26,10 @@ public class GenericBeanDefinition implements BeanDefinition{
         this.id = id;
         this.beanClassName = beanClassName;
     }
+    public GenericBeanDefinition() {
+        // TODO Auto-generated constructor stub
+    }
+
     public void setBeanClassName(String beanClassName) {
         this.beanClassName = beanClassName;
     }
@@ -76,6 +81,32 @@ public class GenericBeanDefinition implements BeanDefinition{
     public boolean hasConstructorArgumentValues() {
         // TODO Auto-generated method stub
         return !this.constructorArgument.isEmpty();
+    }
+
+    @Override
+    public boolean hasBeanClass() {
+        // TODO Auto-generated method stub
+        return beanClass != null;
+    }
+
+    @Override
+    public Class<?> resolveBeanClass(ClassLoader beanClassLoader) throws Exception {
+        // TODO Auto-generated method stub
+        if (beanClassName == null) {
+            return null;
+        }
+        Class<?> resolvedClass = beanClassLoader.loadClass(beanClassName);
+        this.beanClass = resolvedClass;
+        return resolvedClass;
+    }
+
+    @Override
+    public Class<?> getBeanClass() {
+        // TODO Auto-generated method stub
+        if (this.beanClass == null) {
+            throw new IllegalStateException("Bean class name [" + this.beanClassName + "] has not been resolved into");
+        }
+        return this.beanClass;
     }
 
 }
