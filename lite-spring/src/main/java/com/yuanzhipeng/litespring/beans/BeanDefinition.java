@@ -19,4 +19,7 @@ public interface BeanDefinition {
     List<PropertyValue> getPropertyValues();
     ConstructorArgument getConstructorArgument();
     boolean hasConstructorArgumentValues();
+    boolean hasBeanClass();
+    Class<?> resolveBeanClass(ClassLoader beanClassLoader) throws Exception;
+    Class<?> getBeanClass();
 }

@@ -1,6 +1,8 @@
 package com.yuanzhipeng.litespring.context.support;
 
 
+import com.yuanzhipeng.litespring.beans.factory.annotation.AutowiredAnnotationProcessor;
+import com.yuanzhipeng.litespring.beans.factory.config.ConfigurableBeanFactory;
 import com.yuanzhipeng.litespring.beans.factory.support.DefaultBeanFactory;
 import com.yuanzhipeng.litespring.beans.factory.xml.XmlBeanDefinitionReader;
 import com.yuanzhipeng.litespring.context.ApplicationContext;
@@ -16,6 +18,7 @@ public abstract class AbstractApplicationContext implements ApplicationContext{
         XmlBeanDefinitionReader reader = new XmlBeanDefinitionReader(factory);
         reader.loadBeanDefinition(getResourceByPath(configFile));
         factory.setBeanClassLoader(getBeanClassLoader());
+        registerBeanPostProcessors(factory);
     }
 
     @Override
@@ -38,15 +41,19 @@ public abstract class AbstractApplicationContext implements ApplicationContext{
 //        return factory.getBeanClassLoader();
 //    }
     
-    @Override
     public void setBeanClassLoader(ClassLoader classLoader) {
         // TODO Auto-generated method stub
         beanClassLoader = classLoader;
     }
 
-    @Override
     public ClassLoader getBeanClassLoader() {
         // TODO Auto-generated method stub
         return this.beanClassLoader == null ? ClassUtils.getDefaultClassLoader(): beanClassLoader;
+    }
+    
+    protected void registerBeanPostProcessors(ConfigurableBeanFactory factory) {
+        AutowiredAnnotationProcessor postProcessor = new AutowiredAnnotationProcessor();
+        postProcessor.setBeanFactory(factory);
+        factory.addBeanPostProcessor(postProcessor);
     }
 }

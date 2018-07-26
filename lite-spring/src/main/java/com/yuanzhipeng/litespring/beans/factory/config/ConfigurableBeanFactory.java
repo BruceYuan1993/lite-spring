@@ -1,8 +1,10 @@
 package com.yuanzhipeng.litespring.beans.factory.config;
 
-import com.yuanzhipeng.litespring.beans.factory.BeanFactory;
+import java.util.List;
 
-public interface ConfigurableBeanFactory extends BeanFactory{
+public interface ConfigurableBeanFactory extends AutowireCapableBeanFactory{
     void setBeanClassLoader(ClassLoader classLoader);
     ClassLoader getBeanClassLoader();
+    void addBeanPostProcessor(BeanPostProcessor postProcessor);
+    List<BeanPostProcessor> getBeanPostProcessors();
 }
