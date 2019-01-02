@@ -1,4 +1,7 @@
 package com.yuanzhipeng.litespring.aop;
 
-public class Advice {
+import org.aopalliance.intercept.MethodInterceptor;
+
+public interface Advice extends MethodInterceptor {
+    Pointcut getPointcut();
 }

@@ -1,12 +1,11 @@
 package com.yuanzhipeng.litespring.test.v5;
 
-import static org.junit.Assert.assertNotNull;
-
-import org.junit.Test;
-
 import com.yuanzhipeng.litespring.context.ApplicationContext;
 import com.yuanzhipeng.litespring.context.support.ClassPathXmlApplicationContext;
 import com.yuanzhipeng.litespring.service.v5.PetStroeService;
+import org.junit.Test;
+
+import static org.junit.Assert.assertNotNull;
 
 public class ApplicationContextTest {
     @Test

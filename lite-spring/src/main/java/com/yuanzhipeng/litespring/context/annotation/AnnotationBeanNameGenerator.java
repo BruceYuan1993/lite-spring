@@ -1,6 +1,5 @@
 package com.yuanzhipeng.litespring.context.annotation;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
 
 import java.beans.Introspector;
 import java.util.Set;

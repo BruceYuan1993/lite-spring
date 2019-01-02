@@ -1,6 +1,8 @@
 package com.yuanzhipeng.litespring.context.support;
 
 
+import com.yuanzhipeng.litespring.beans.BeanDefinition;
+import com.yuanzhipeng.litespring.beans.factory.NoSuchBeanDefinitionException;
 import com.yuanzhipeng.litespring.beans.factory.annotation.AutowiredAnnotationProcessor;
 import com.yuanzhipeng.litespring.beans.factory.config.ConfigurableBeanFactory;
 import com.yuanzhipeng.litespring.beans.factory.support.DefaultBeanFactory;
@@ -55,5 +57,9 @@ public abstract class AbstractApplicationContext implements ApplicationContext{
         AutowiredAnnotationProcessor postProcessor = new AutowiredAnnotationProcessor();
         postProcessor.setBeanFactory(factory);
         factory.addBeanPostProcessor(postProcessor);
+    }
+
+    public Class<?> getType(String name) throws NoSuchBeanDefinitionException {
+        return factory.getType(name);
     }
 }

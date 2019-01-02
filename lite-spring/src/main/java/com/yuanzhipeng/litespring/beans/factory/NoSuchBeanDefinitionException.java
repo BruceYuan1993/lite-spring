@@ -1,6 +1,8 @@
 package com.yuanzhipeng.litespring.beans.factory;
 
-public class NoSuchBeanDefinitionException extends Exception{
+import com.yuanzhipeng.litespring.util.StringUtils;
+
+public class NoSuchBeanDefinitionException extends RuntimeException{
     /** Name of the missing bean */
     private String beanName;
 
@@ -77,7 +79,7 @@ public class NoSuchBeanDefinitionException extends Exception{
     /**
      * Return the number of beans found when only one matching bean was expected.
      * For a regular NoSuchBeanDefinitionException, this will always be 0.
-     * @see NoUniqueBeanDefinitionException
+     * @see
      */
     public int getNumberOfBeansFound() {
         return 0;

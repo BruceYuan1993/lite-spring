@@ -1,36 +1,61 @@
-package com.yuanzhipeng.litespring.aop.aspectj;
+package com.yuanzhipeng.litespring.aop.framework;
 
+import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 
 import java.lang.reflect.AccessibleObject;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.List;
 
 public class ReflectiveMethodInvocation implements MethodInvocation {
     protected final Object targetObject;
     protected final Method tergetMethod;
     protected Object[] arguments;
-    @Override
-    public Method getMethod() {
-        return null;
+
+    private final List<MethodInterceptor> interceptors;
+
+    private int currentInterceptorindex = -1;
+
+    public ReflectiveMethodInvocation(Object targetObject, Method tergetMethod, Object[] arguments, List<MethodInterceptor> interceptors) {
+        this.targetObject = targetObject;
+        this.tergetMethod = tergetMethod;
+        this.arguments = arguments;
+        this.interceptors = interceptors;
     }
 
     @Override
-    public Object[] getArguments() {
-        return new Object[0];
+    public final Method getMethod() {
+        return this.tergetMethod;
+    }
+
+    @Override
+    public final Object[] getArguments() {
+        return this.arguments != null ? this.arguments : new Object[0];
     }
 
     @Override
     public Object proceed() throws Throwable {
-        return null;
+       if (this.currentInterceptorindex == this.interceptors.size() - 1){
+           return invokeJoinpoint();
+       }
+       this.currentInterceptorindex++;
+       MethodInterceptor interceptor = this.interceptors.get(currentInterceptorindex);
+
+       return interceptor.invoke(this);
+    }
+
+    private Object invokeJoinpoint() throws Exception {
+        return this.tergetMethod.invoke(targetObject, arguments);
     }
 
     @Override
-    public Object getThis() {
-        return null;
+    public final Object getThis() {
+        return this.targetObject;
     }
 
     @Override
     public AccessibleObject getStaticPart() {
-        return null;
+        return this.tergetMethod;
     }
 }

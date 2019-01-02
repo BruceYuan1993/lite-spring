@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.yuanzhipeng.litespring.beans.factory.NoSuchBeanDefinitionException;
 import org.apache.commons.beanutils.BeanUtils;
 
 import com.yuanzhipeng.litespring.beans.BeanDefinition;
@@ -30,7 +31,7 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
     private ClassLoader beanClassLoader;
     private BeanDefinitionValueResolver resolver = new BeanDefinitionValueResolver(this);
     private TypeConverter converter = new SimpleTypeConverter();
-    private List<BeanPostProcessor> postProcrssors = new LinkedList<BeanPostProcessor>();
+    private List<BeanPostProcessor> postProcessors = new LinkedList<BeanPostProcessor>();
     public BeanDefinition getBeanDefinition(String beanId) {
         // TODO Auto-generated method stub
         return beanDefinitionMap.get(beanId);
@@ -53,6 +54,16 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
         }
         return createBean(bd);
 
+    }
+
+    @Override
+    public Class<?> getType(String name) throws NoSuchBeanDefinitionException {
+        BeanDefinition bd = this.getBeanDefinition(name);
+        if (bd == null) {
+            throw new NoSuchBeanDefinitionException(name);
+        }
+        resolveBeanClass(bd);
+        return  bd.getBeanClass();
     }
 
     private Object createBean(BeanDefinition bd) {
@@ -178,13 +189,13 @@ public class DefaultBeanFactory extends DefaultSingletonBeanRegistry
     @Override
     public void addBeanPostProcessor(BeanPostProcessor postProcessor) {
         // TODO Auto-generated method stub
-        postProcrssors.add(postProcessor);
+        postProcessors.add(postProcessor);
     }
 
     @Override
     public List<BeanPostProcessor> getBeanPostProcessors() {
         // TODO Auto-generated method stub
-        return Collections.unmodifiableList(postProcrssors);
+        return Collections.unmodifiableList(postProcessors);
     }
 
 }
