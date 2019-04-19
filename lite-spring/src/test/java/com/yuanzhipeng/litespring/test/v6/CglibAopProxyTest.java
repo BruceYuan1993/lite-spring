@@ -3,6 +3,9 @@ package com.yuanzhipeng.litespring.test.v6;
 import com.yuanzhipeng.litespring.aop.aspectj.AspectJAfterReturningAdvice;
 import com.yuanzhipeng.litespring.aop.aspectj.AspectJBeforeAdvice;
 import com.yuanzhipeng.litespring.aop.aspectj.AspectJExpressionPointcut;
+import com.yuanzhipeng.litespring.aop.framework.AopConfig;
+import com.yuanzhipeng.litespring.aop.framework.AopConfigSupport;
+import com.yuanzhipeng.litespring.aop.framework.CglibProxyFactory;
 import com.yuanzhipeng.litespring.service.v6.PetStroeService;
 import com.yuanzhipeng.litespring.tx.TransactionManager;
 import com.yuanzhipeng.litespring.util.MessageTracker;
@@ -48,7 +51,7 @@ public class CglibAopProxyTest {
 
         config.addAdvice(beforeAdvice);
         config.addAdvice(afterAdvice);
-        config.setTargetObject(new PetStoreService());
+        config.setTargetObject(new PetStroeService());
 
 
         CglibProxyFactory proxyFactory = new CglibProxyFactory(config);
