@@ -22,4 +22,5 @@ public interface BeanDefinition {
     boolean hasBeanClass();
     Class<?> resolveBeanClass(ClassLoader beanClassLoader) throws Exception;
     Class<?> getBeanClass();
+    boolean isSynthetic();
 }

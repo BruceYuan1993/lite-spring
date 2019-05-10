@@ -13,8 +13,8 @@ import com.yuanzhipeng.litespring.beans.factory.config.ConfigurableBeanFactory;
 
 public class ConstructorResolver {
 
-    private final ConfigurableBeanFactory factory;
-    public ConstructorResolver(ConfigurableBeanFactory factory) {
+    private final AbstractBeanFactory factory;
+    public ConstructorResolver(AbstractBeanFactory factory) {
         // TODO Auto-generated constructor stub
         this.factory = factory;
     }
@@ -53,7 +53,7 @@ public class ConstructorResolver {
                 constructorToUse = item;
                 break;
             }
-        }
+        } 
         
         if (constructorToUse == null) {
             throw new BeanCreationException(bd.getId(), "Cannot find a constructor using"); 

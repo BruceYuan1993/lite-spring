@@ -81,13 +81,13 @@ public class AutowiredAnnotationProcessor implements InstantiationAwareBeanPostP
     @Override
     public Object beforeInitialization(Object bean, String beanName) throws BeansException {
         // TODO Auto-generated method stub
-        return null;
+        return bean;
     }
 
     @Override
     public Object afterInitialization(Object bean, String beanName) throws BeansException {
         // TODO Auto-generated method stub
-        return null;
+        return bean;
     }
 
     @Override
@@ -99,7 +99,7 @@ public class AutowiredAnnotationProcessor implements InstantiationAwareBeanPostP
     @Override
     public boolean afterInstantiation(Object bean, String beanName) throws BeansException {
         // TODO Auto-generated method stub
-        return false;
+        return true;
     }
 
     @Override

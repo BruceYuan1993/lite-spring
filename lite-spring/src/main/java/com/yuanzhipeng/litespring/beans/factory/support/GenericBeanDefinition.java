@@ -15,7 +15,7 @@ public class GenericBeanDefinition implements BeanDefinition{
     private Class<?> beanClass;
     private List<PropertyValue> pvs = new ArrayList<>();
     private ConstructorArgument constructorArgument = new ConstructorArgument();
-    
+    private boolean synthetic = false;
     
     public String getId() {
         return id;
@@ -28,6 +28,13 @@ public class GenericBeanDefinition implements BeanDefinition{
     }
     public GenericBeanDefinition() {
         // TODO Auto-generated constructor stub
+    }
+    
+    public GenericBeanDefinition(Class<?> beanClass) {
+        // TODO Auto-generated constructor stub
+        
+        this.beanClass = beanClass;
+        this.beanClassName = beanClass.getName();
     }
 
     public void setBeanClassName(String beanClassName) {
@@ -107,6 +114,16 @@ public class GenericBeanDefinition implements BeanDefinition{
             throw new IllegalStateException("Bean class name [" + this.beanClassName + "] has not been resolved into");
         }
         return this.beanClass;
+    }
+
+    @Override
+    public boolean isSynthetic() {
+        // TODO Auto-generated method stub
+        return synthetic;
+    }
+
+    public void setSynthetic(boolean synthetic) {
+        this.synthetic = synthetic;
     }
 
 }

@@ -1,5 +1,7 @@
 package com.yuanzhipeng.litespring.context.support;
 
+import java.util.List;
+
 import com.yuanzhipeng.litespring.core.io.FileSystemResource;
 import com.yuanzhipeng.litespring.core.io.Resource;
 
@@ -15,5 +17,4 @@ public class FileSystemXmlApplicationContext extends AbstractApplicationContext{
         // TODO Auto-generated method stub
         return new FileSystemResource(path);
     }
-    
 }

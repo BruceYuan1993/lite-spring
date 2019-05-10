@@ -2,11 +2,13 @@ package com.yuanzhipeng.litespring.aop.config;
 
 import com.yuanzhipeng.litespring.beans.BeanUtils;
 import com.yuanzhipeng.litespring.beans.factory.BeanFactory;
+import com.yuanzhipeng.litespring.beans.factory.BeanFactoryAware;
+import com.yuanzhipeng.litespring.beans.factory.FactoryBean;
 import com.yuanzhipeng.litespring.util.StringUtils;
 
 import java.lang.reflect.Method;
 
-public class MethodLocatingFactory {
+public class MethodLocatingFactory implements FactoryBean<Method>, BeanFactoryAware{
     private String targetBeanName;
     private String methodName;
     private Method method;
@@ -41,5 +43,11 @@ public class MethodLocatingFactory {
 
     public  Method getObject() throws Exception{
         return this.method;
+    }
+
+    @Override
+    public Class<?> getObjectType() {
+        // TODO Auto-generated method stub
+        return Method.class;
     }
 }

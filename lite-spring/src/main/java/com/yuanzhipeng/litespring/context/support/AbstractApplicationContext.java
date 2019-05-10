@@ -1,7 +1,9 @@
 package com.yuanzhipeng.litespring.context.support;
 
 
-import com.yuanzhipeng.litespring.beans.BeanDefinition;
+import java.util.List;
+
+import com.yuanzhipeng.litespring.aop.aspectj.AspectJAutoProxyCreator;
 import com.yuanzhipeng.litespring.beans.factory.NoSuchBeanDefinitionException;
 import com.yuanzhipeng.litespring.beans.factory.annotation.AutowiredAnnotationProcessor;
 import com.yuanzhipeng.litespring.beans.factory.config.ConfigurableBeanFactory;
@@ -54,12 +56,28 @@ public abstract class AbstractApplicationContext implements ApplicationContext{
     }
     
     protected void registerBeanPostProcessors(ConfigurableBeanFactory factory) {
-        AutowiredAnnotationProcessor postProcessor = new AutowiredAnnotationProcessor();
-        postProcessor.setBeanFactory(factory);
-        factory.addBeanPostProcessor(postProcessor);
+        {
+            AutowiredAnnotationProcessor postProcessor = new AutowiredAnnotationProcessor();
+            postProcessor.setBeanFactory(factory);
+            factory.addBeanPostProcessor(postProcessor);
+        }
+
+        {
+            AspectJAutoProxyCreator postProcessor = new AspectJAutoProxyCreator();
+            postProcessor.setBeanFactory(factory);
+            factory.addBeanPostProcessor(postProcessor);
+        }
+
+        
     }
 
     public Class<?> getType(String name) throws NoSuchBeanDefinitionException {
         return factory.getType(name);
+    }
+    
+    @Override
+    public List<Object> getBeansByType(Class<?> clz) {
+        // TODO Auto-generated method stub
+        return factory.getBeansByType(clz);
     }
 }

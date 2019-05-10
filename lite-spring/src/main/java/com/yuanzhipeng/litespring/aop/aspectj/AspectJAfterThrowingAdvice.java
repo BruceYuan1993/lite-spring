@@ -1,15 +1,16 @@
 package com.yuanzhipeng.litespring.aop.aspectj;
 
-import com.yuanzhipeng.litespring.aop.Advice;
 import com.yuanzhipeng.litespring.aop.Pointcut;
+import com.yuanzhipeng.litespring.beans.factory.config.AspectInstanceFactory;
+
 import org.aopalliance.intercept.MethodInvocation;
 
 import java.lang.reflect.Method;
 
 public class AspectJAfterThrowingAdvice extends AbstractAspectJAdvice {
 
-    public AspectJAfterThrowingAdvice(Method adviceMethod, Pointcut pc, Object adviceObject) {
-        super(adviceMethod, pc, adviceObject);
+    public AspectJAfterThrowingAdvice(Method adviceMethod, Pointcut pc, AspectInstanceFactory adviceObjectFactory) {
+        super(adviceMethod, pc, adviceObjectFactory);
     }
 
     @Override
